@@ -1,23 +1,55 @@
-import logo from './logo.svg';
+import { getDefaultNormalizer } from '@testing-library/dom';
+import React,{useEffect,useState} from 'react';
 import './App.css';
+import Card from './components/Card';
+import axios from 'axios';
+
+
 
 function App() {
+
+  const [data, setData] = useState([])
+
+
+  const getData = async() =>{
+      axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        setData(response.data)
+      })
+      .catch(function (error) {
+        // handle error
+        // console.log(error);
+        console.log('error');
+      })
+      .then(function () {
+        // always executed
+      });
+  }
+
+  useEffect(() => {
+    getData()
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <center><h2>USERS DATA</h2></center>
+      <div style={{
+        display:'flex',
+        justifyContent:'space-between',
+        flexWrap:'wrap',
+        margin:'2rem',
+        
+        // background:'black'
+      }}>
+      {/* <Card /> */}
+        {
+          data.map(e=>{
+            return <Card obj={e}/>
+          })
+        }
+
+      </div>
     </div>
   );
 }
